@@ -6,15 +6,15 @@ import 'package:url_launcher/url_launcher.dart';
 
 class SecondScreen extends StatefulWidget {
   final XFile image;
-  const SecondScreen({Key? key, required this.image}) : super(key: key);
+  Service service;
+  SecondScreen({Key? key, required this.image, required this.service})
+      : super(key: key);
 
   @override
   State<SecondScreen> createState() => _SecondScreenState();
 }
 
 class _SecondScreenState extends State<SecondScreen> {
-  final _service = Service(
-      "https://3aeb-2409-4052-2e1a-d52a-ad09-b112-cf14-8cce.in.ngrok.io");
   var res;
 
   String? getEmoji(String emotion) {
@@ -43,9 +43,37 @@ class _SecondScreenState extends State<SecondScreen> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Em Music'),
+        actions: [
+          //settings
+          IconButton(
+            icon: Icon(Icons.settings),
+            onPressed: () {
+              //show dialog to input url
+              showDialog(
+                context: context,
+                builder: (context) => AlertDialog(
+                  title: const Text('Enter base url'),
+                  content: TextField(
+                    onChanged: (value) {
+                      widget.service.baseUrl = value;
+                    },
+                  ),
+                  actions: [
+                    FlatButton(
+                      child: const Text('OK'),
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                      },
+                    ),
+                  ],
+                ),
+              );
+            },
+          ),
+        ],
       ),
       body: FutureBuilder(
-          future: _service.getEmotion(widget.image),
+          future: widget.service.getEmotion(widget.image),
           builder: (context, snapshot) {
             if (snapshot.hasData) {
               res = snapshot.data;

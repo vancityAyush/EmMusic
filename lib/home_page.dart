@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:camera/camera.dart';
 import 'package:em_music/second_screen.dart';
+import 'package:em_music/service.dart';
 import 'package:flutter/material.dart';
 
 Future<void> main() async {
@@ -59,10 +60,42 @@ class TakePictureScreenState extends State<TakePictureScreen> {
     super.dispose();
   }
 
+  final _service = Service(
+      "https://3aeb-2409-4052-2e1a-d52a-ad09-b112-cf14-8cce.in.ngrok.io");
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Take a picture')),
+      appBar: AppBar(
+        title: const Text('Take a picture'),
+        actions: [
+          //settings
+          IconButton(
+            icon: Icon(Icons.settings),
+            onPressed: () {
+              //show dialog to input url
+              showDialog(
+                context: context,
+                builder: (context) => AlertDialog(
+                  title: const Text('Enter base url'),
+                  content: TextField(
+                    onChanged: (value) {
+                      _service.baseUrl = value;
+                    },
+                  ),
+                  actions: [
+                    FlatButton(
+                      child: const Text('OK'),
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                      },
+                    ),
+                  ],
+                ),
+              );
+            },
+          ),
+        ],
+      ),
       body: Container(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -99,6 +132,7 @@ class TakePictureScreenState extends State<TakePictureScreen> {
                     MaterialPageRoute(
                       builder: (context) => SecondScreen(
                         image: image,
+                        service: _service,
                       ),
                     ),
                   );
