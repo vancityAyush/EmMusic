@@ -5,11 +5,12 @@
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 
-import 'home_page.dart';
+import 'take_picture.dart';
 
 class Splash extends StatefulWidget {
-  CameraDescription camera;
-  Splash({Key? key, required this.camera}) : super(key: key);
+  Splash({
+    Key? key,
+  }) : super(key: key);
 
   @override
   State<Splash> createState() => _SplashState();
@@ -19,11 +20,17 @@ class _SplashState extends State<Splash> {
   @override
   initState() {
     super.initState();
-    Future.delayed(Duration(seconds: 2), () {
+    Future.delayed(Duration(seconds: 2), () async {
+      // Obtain a list of the available cameras on the device.
+      final cameras = await availableCameras();
+
+      // Get a specific camera from the list of available cameras.
+      final firstCamera = cameras.firstWhere(
+          (element) => element.lensDirection == CameraLensDirection.front);
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(
-          builder: (context) => TakePictureScreen(camera: widget.camera),
+          builder: (context) => TakePictureScreen(camera: firstCamera),
         ),
       );
     });
@@ -32,10 +39,14 @@ class _SplashState extends State<Splash> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Center(
-        child: Image.asset(
-          "assets/logo.png",
-          fit: BoxFit.fitWidth,
+      backgroundColor: Color(0xff004AAD),
+      body: Container(
+        color: Color(0xff004AAD),
+        child: Center(
+          child: Image.asset(
+            "assets/logo.png",
+            fit: BoxFit.contain,
+          ),
         ),
       ),
     );

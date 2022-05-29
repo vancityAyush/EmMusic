@@ -3,30 +3,8 @@ import 'dart:async';
 import 'package:camera/camera.dart';
 import 'package:em_music/second_screen.dart';
 import 'package:em_music/service.dart';
-import 'package:em_music/splash.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
-Future<void> main() async {
-  // Ensure that plugin services are initialized so that `availableCameras()`
-  // can be called before `runApp()`
-  WidgetsFlutterBinding.ensureInitialized();
-
-  // Obtain a list of the available cameras on the device.
-  final cameras = await availableCameras();
-  CameraDescription selectedCamera = cameras.firstWhere(
-      (camera) => camera.lensDirection == CameraLensDirection.front);
-
-  runApp(
-    MaterialApp(
-      theme: ThemeData.dark(),
-      home: Splash(
-        // Pass the appropriate camera to the TakePictureScreen widget.
-        camera: selectedCamera,
-      ),
-    ),
-  );
-}
 
 // A screen that allows users to take a picture using a given camera.
 class TakePictureScreen extends StatefulWidget {
@@ -125,7 +103,7 @@ class TakePictureScreenState extends State<TakePictureScreen> {
                 ),
               ),
               shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(24),
+                borderRadius: BorderRadius.circular(10),
               ),
               color: Color(0xff004AAD),
               onPressed: () async {
