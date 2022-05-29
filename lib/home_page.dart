@@ -3,7 +3,9 @@ import 'dart:async';
 import 'package:camera/camera.dart';
 import 'package:em_music/second_screen.dart';
 import 'package:em_music/service.dart';
+import 'package:em_music/splash.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 Future<void> main() async {
   // Ensure that plugin services are initialized so that `availableCameras()`
@@ -18,7 +20,7 @@ Future<void> main() async {
   runApp(
     MaterialApp(
       theme: ThemeData.dark(),
-      home: TakePictureScreen(
+      home: Splash(
         // Pass the appropriate camera to the TakePictureScreen widget.
         camera: selectedCamera,
       ),
@@ -85,7 +87,9 @@ class TakePictureScreenState extends State<TakePictureScreen> {
                   actions: [
                     FlatButton(
                       child: const Text('OK'),
-                      onPressed: () {
+                      onPressed: () async {
+                        final prefs = await SharedPreferences.getInstance();
+                        prefs.setString("baseUrl", _service.baseUrl);
                         Navigator.of(context).pop();
                       },
                     ),

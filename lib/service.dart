@@ -1,5 +1,6 @@
 import 'package:camera/camera.dart';
 import 'package:dio/dio.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class Service {
   String baseUrl =
@@ -9,6 +10,8 @@ class Service {
 
   Future<dynamic> getEmotion(XFile image) async {
     try {
+      final prefs = await SharedPreferences.getInstance();
+      baseUrl = prefs.getString("baseUrl") ?? baseUrl;
       final FormData form = FormData.fromMap({
         "image":
             await MultipartFile.fromFile(image.path, filename: 'image.jpg'),

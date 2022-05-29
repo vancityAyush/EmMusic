@@ -2,6 +2,7 @@ import 'package:blurrycontainer/blurrycontainer.dart';
 import 'package:camera/camera.dart';
 import 'package:em_music/service.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class SecondScreen extends StatefulWidget {
@@ -61,7 +62,9 @@ class _SecondScreenState extends State<SecondScreen> {
                   actions: [
                     FlatButton(
                       child: const Text('OK'),
-                      onPressed: () {
+                      onPressed: () async {
+                        final prefs = await SharedPreferences.getInstance();
+                        prefs.setString("baseUrl", widget.service.baseUrl);
                         Navigator.of(context).pop();
                       },
                     ),
@@ -80,7 +83,7 @@ class _SecondScreenState extends State<SecondScreen> {
               return Container(
                 decoration: const BoxDecoration(
                   color: const Color(0xff004AAD),
-                  image: const DecorationImage(
+                  image: DecorationImage(
                     alignment: Alignment.topCenter,
                     image: AssetImage(
                       "assets/logo.png",
